@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .layui-body .content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .out {
+            margin-top: 60px;
+        }
+
+        span {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .layui-timeline-item{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">TZC送水平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="/shop">首页</a></li>
+            <li class="layui-nav-item layui-this"><a href="/order">我的订单</a></li>
+            <li class="layui-nav-item">
+                <a href="/address">我的地址</a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="https://ziyangimg.oss-cn-beijing.aliyuncs.com/default_head.jpeg" class="layui-nav-img">
+                    <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.username }"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="@{/logout}">退出</a></li>
+        </ul>
+    </div>
+    <div class="layui-body">
+        <div class="out">
+            <div class="content">
+                <ul class="layui-timeline">
+                    <li class="layui-timeline-item" th:each="order:${orderList}">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title" th:text="${order.creTime}">8月18日</h3>
+                            <p>
+                                <span th:text="${order.getGoodsName()}"></span>
+                                <span th:text="${order.getNum()}+'瓶'"></span>
+                                <span th:text="'地址  '+${order.getAddress()}"></span>
+                                <span style="color: #FD3B1C" th:text="'花费  ￥'+${order.getMoney()}"></span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    layui.use(['layer', 'form', 'jquery'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.jquery;
+
+    });
+</script>
+</body>
+</html>

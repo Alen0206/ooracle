@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ooracle.mapper.TOrderMapper">
+    <resultMap id="BaseResultMap" type="com.example.ooracle.pojo.TOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="GOODS_ID" jdbcType="DECIMAL" property="goodsId"/>
+        <result column="NUM" jdbcType="DECIMAL" property="num"/>
+        <result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
+        <result column="CRETIME" jdbcType="TIMESTAMP" property="cretime"/>
+    </resultMap>
+    <insert id="insertOrder">
+        insert into T_ORDER(goods_id,num,user_id) values (#{goods_id},#{num},#{user_id})
+    </insert>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+      select * from T_ORDER where user_id = #{userId} order by cretime desc
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ooracle.mapper.TUserMapper">
+  <resultMap id="BaseResultMap" type="com.example.ooracle.pojo.TUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="CRETIME" jdbcType="TIMESTAMP" property="cretime" />
+    <result column="ROLE" jdbcType="VARCHAR" property="role" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+    <insert id="insertUser">
+      insert into T_USER(username,password,address,phone,role) values (#{username},#{password},#{address},#{phone},#{role,jdbcType = VARCHAR})
+    </insert>
+    <update id="updateUser">
+    update T_USER set username = #{username} , password = #{password} , phone = #{phone} ,address = #{address} where id  = #{id}
+  </update>
+    <select id="selectByUserName" resultMap="BaseResultMap">
+    select * from  T_USER where USERNAME = #{userName}
+  </select>
+
+    <select id="selectAllUser" resultMap="BaseResultMap">
+    select * from T_USER order by id
+  </select>
+
+    <select id="searchUser" resultMap="BaseResultMap">
+    select * from T_USER where username like CONCAT( CONCAT('%',#{userName}),'%')
+  </select>
+
+</mapper>

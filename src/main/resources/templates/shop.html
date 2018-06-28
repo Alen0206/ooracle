@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .layui-body {
+            /*margin-right: 200px;*/
+            overflow: auto;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /*.layui-layout-admin .layui-body{*/
+        /*bottom: 0px;*/
+        /*}*/
+
+        .goods {
+            width: 240px;
+            margin: 50px auto;
+            border: 1px solid #EBEBEB;
+        }
+
+        .goods img {
+            width: 240px;
+            height: 240px;
+        }
+
+        .price {
+            color: #FD3B1C;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-left: 20px;
+        }
+
+        .goodsName {
+            margin-left: 20px;
+            color: #000000;
+            font-size: 20px;
+        }
+
+        .layui-btn {
+            margin-top: 10px;
+        }
+
+        .layui-input {
+            margin-top: 10px;
+            width: 200px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .footer {
+            margin-top: 10px;
+        }
+
+        .layui-body .content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">TZC送水平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item layui-this"><a href="">首页</a></li>
+            <li class="layui-nav-item"><a href="/order">我的订单</a></li>
+            <li class="layui-nav-item">
+                <a href="/address">我的地址</a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="https://ziyangimg.oss-cn-beijing.aliyuncs.com/default_head.jpeg" class="layui-nav-img">
+                    <span id="username"
+                          th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.username }"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="@{/logout}">退出</a></li>
+        </ul>
+    </div>
+    <div class="layui-body">
+        <div class="content">
+            <div class="layui-fluid">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md3" th:each="goods:${goodsList}">
+                        <div class="goods">
+                            <div id="goodsId" th:text="${goods.getId()}" style="display: none"></div>
+                            <div class="img">
+                                <img src="https://ziyangimg.oss-cn-beijing.aliyuncs.com/oracle/cocacola.png"
+                                     th:src="${goods.getImage()}">
+                            </div>
+                            <div class="footer">
+                                <span class="goodsName" th:text="${goods.getName()}">CocoCola</span> <span class="price"
+                                                                                                           th:text="'￥'+${goods.getPrice()}">￥15.9</span>
+                                <br/>
+                                <input type="text" name="title" placeholder="请输入数量"
+                                       class="layui-input">
+                                <button class="layui-btn layui-btn-fluid buy-btn">立即购买</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    layui.use(['layer', 'form', 'jquery'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.jquery;
+        $('.buy-btn').click(function () {
+            var goodsId = $(this).parent().parent().children().eq(0).text()
+            var num = $(this).parent().children().eq(3).val()
+            if (num == '') {
+                layer.msg('数量不能为空噢')
+                return;
+            }
+            var username = $('#username').text()
+            $.ajax({
+                url: '/api/order',
+                type: 'post',
+                data: {goodsId: goodsId, num: num, username: username},
+                success: function (data) {
+                    layer.msg('购买成功', {icon: 1});
+                    $('input').val('')
+                }
+            })
+
+        })
+    });
+</script>
+</body>
+</html>

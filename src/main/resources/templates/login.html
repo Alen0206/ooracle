@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        body {
+            background: #F1F1F1;
+        }
+
+        .layui-form {
+            background: #F1F1F1;
+            border: 1px solid #F1F1F1;
+        }
+        #content{
+            position: absolute;
+            left:50%;
+            top:50%;
+            margin-left:-250px;
+            margin-top:-250px;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <form class="layui-form" action="" method="post">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <span style="font-size: 20px">TZC送水系统</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-inline">
+                <input id="username" type="text" name="username" required lay-verify="required" placeholder="请输入账号"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux" id="checkUserName"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input id="password" type="password" name="password" required lay-verify="required"
+                       placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+               <a href="/register">还没注册?</a>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">登陆</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    layui.use(['layer', 'form', 'jquery'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.jquery;
+
+    });
+</script>
+</body>
+</html>

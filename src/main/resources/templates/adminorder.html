@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>订单</title>
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}">
+    <script th:src="@{/static/layui/layui.js}"></script>
+    <style>
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">首页</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="https://ziyangimg.oss-cn-beijing.aliyuncs.com/default_head.jpeg" class="layui-nav-img">
+                    <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.username }"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="@{/logout}">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/user">用户列表</a></dd>
+
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">商品管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/goods">商品列表</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item  layui-nav-itemed">
+                    <a href="javascript:;">订单管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/order" class="layui-this">订单列表</a></dd>
+                    </dl>
+                </li>
+                s
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="layui-body">
+        <div style="margin-left: 50px;margin-top: 50px;width: 1200px">
+            <blockquote class="layui-elem-quote">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" value="" placeholder="请输入关键字" class="layui-input search_text">
+                    </div>
+                    <a class="layui-btn search_btn">查询</a>
+                </div>
+
+            </blockquote>
+        </div>
+        <div style="margin-top: 10px;margin-left: 50px">
+            <table id="test" class="layui-table " cellpadding="40dp" lay-data="{id: 'idTest'}"></table>
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-normal  layui-btn-sm detail">查看</a>
+                <a class="layui-btn  layui-btn-sm edit">编辑</a>
+                <a class="layui-btn layui-btn-danger  layui-btn-sm del">删除</a>
+            </script>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © 5108工作室
+    </div>
+
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    layui.use(['table', 'element', 'jquery', 'layer', 'form'], function () {
+        var table = layui.table,
+            element = layui.element,
+            $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer;
+        table.render({
+            elem: '#test'
+            , url: '/api/orders'
+            , width: 1200
+            //, cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , page: true
+            , cols: [
+                [
+                    {field: 'id', title: 'ID', width: 50, sort: true}
+                    , {field: 'goodsName', title: '商品名'}
+                    , {field: 'num', width: 100, title: '数量', sort: true}
+                    , {field: 'money', width: 100, title: '总额', sort: true}
+                    , {field: 'username', title: '买家'}
+                    , {field: 'address', width: 200, title: '地址'}
+                    , {field: 'creTime', width: 180, title: '订单时间', sort: true}
+                    , {field: 'right', title: '操作', toolbar: "#barDemo"}
+                ]
+            ]
+            // , done: function () {
+            //     /*
+            //     删除用户
+            //      */
+            //     $(".del").click(function () {
+            //         var id = $(this).parents('tr').children('td').eq(0).text();
+            //         var username = $(this).parents('tr').children('td').eq(1).text();
+            //         layer.confirm("确认删除" + username + "吗？", {
+            //             btn: ['是', '否'], btn1: function () {
+            //                 {
+            //                     $.ajax({
+            //                         url: '/api/user/' + id,
+            //                         type: "DELETE",
+            //                         success: function (data) {
+            //                             layer.msg(data.msg);
+            //                             if (data.code == 1) {
+            //                                 //刷新表格
+            //                                 $(".layui-laypage-btn").click()
+            //                             } else {
+            //                                 alert("删除失败");
+            //                             }
+            //                         }
+            //                     })
+            //                 }
+            //             }, btn2: function () {
+            //                 layer.msg("取消成功");
+            //             }
+            //         })
+            //     })
+            //
+            //     /*
+            //     查看用户
+            //      */
+            //     $(".detail").click(function () {
+            //         var id = $(this).parents('tr').children('td').eq(0).text();
+            //         userDetail(id)
+            //     })
+            //     /*
+            //     编辑用户
+            //      */
+            //     $(".edit").click(function () {
+            //         var id = $(this).parents('tr').children('td').eq(0).text();
+            //         userEdit(id)
+            //     })
+            // }
+
+        });
+    })
+</script>
+
+</body>
+</html>

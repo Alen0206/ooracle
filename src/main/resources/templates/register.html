@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        body {
+            background: #F1F1F1;
+        }
+
+        .layui-form {
+            background: #F1F1F1;
+            border: 1px solid #F1F1F1;
+        }
+
+        .layui-form-item {
+            margin-right: 60px;
+        }
+        #content{
+
+            position: absolute;
+            left:50%;
+            top:50%;
+            margin-left:-250px;
+            margin-top:-300px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="content">
+    <form class="layui-form" action="">
+        <div class="layui-form-item" style="margin-top: 30px">
+            <span style="font-size: 28px;text-align: center;display: block">用户注册</span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="insert_username" required lay-verify="required"
+                       placeholder="请输入账号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="男" title="男" checked>
+                <input type="radio" name="sex" value="女" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">地址备注</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入地址" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom: 40px;">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">注册</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script src="/static/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    layui.use(['layer', 'form', 'jquery'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.jquery;
+
+    });
+
+
+    $('#insert_btn').click(function () {
+        if (checkUserName) {
+            $.ajax({
+                url: '/api/user',
+                type: 'post',
+                data: $('#userInsert').serialize(),
+                success: function (data) {
+                    console.log(data.code)
+                }
+            })
+        } else {
+            layer.msg('用户名不可用', {icon: 5})
+        }
+
+    })
+
+    //判断用户是否存在
+    $('#insert_username').change(function () {
+        var username = $(this).val();
+        if (username!= ""){
+            $.post("/api/user/check", {username: username},
+                function (data) {
+                    if (data.code == 0) {
+                        checkUserName = false
+                        layer.msg('用户名已存在', {icon: 5})
+                    } else {
+                        checkUserName = true;
+                        layer.msg('用户名可用', {icon: 1})
+                    }
+                });
+        }else {
+            layer.msg('用户名不能为空', {icon: 5})
+        }
+
+    })
+
+</script>
+</body>
+</html>
